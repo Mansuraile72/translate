@@ -4,42 +4,45 @@
     <meta charset="UTF-8">
     <title>Text-to-Speech App</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
-            text-align: center;
-            padding: 50px;
-        }
-        textarea {
-            width: 80%;
-            height: 100px;
-            margin-bottom: 20px;
-            padding: 10px;
-            font-size: 16px;
-        }
-        input[type="range"] {
-            width: 200px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
-        audio {
-            margin-top: 20px;
-        }
+        body { font-family: Arial, sans-serif; background-color: #f7f7f7; text-align: center; padding: 50px; }
+        textarea { width: 80%; height: 100px; margin-bottom: 20px; padding: 10px; font-size: 16px; }
+        select, button { padding: 10px 20px; font-size: 16px; margin-top: 10px; }
+        audio { margin-top: 20px; }
     </style>
 </head>
 <body>
     <h1>🌟 Text-to-Speech App 🌟</h1>
     <textarea id="text-input" placeholder="Enter your text here..."></textarea><br>
-    <label for="speed-input">Speed:</label>
-    <input type="range" id="speed-input" min="0.5" max="1.5" value="1.0" step="0.1"><br>
+    <label for="speed-select">Speed:</label>
+    <select id="speed-select">
+        <option value="normal" selected>Normal</option>
+        <option value="slow">Slow</option>
+    </select><br>
     <button onclick="convertText()">🎤 Convert to Audio</button>
     <br><br>
     <audio id="audio-player" controls></audio>
 
-    <script src="/static/script.js"></script>
+    <script>
+        async function convertText() {
+            const text = document.getElementById('text-input').value;
+            const speed = document.getElementById('speed-select').value;
+
+            const response = await fetch('/tts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text, speed })
+            });
+
+            const result = await response.json();
+
+            if (result.audio_url) {
+                const audioPlayer = document.getElementById('audio-player');
+                audioPlayer.src = result.audio_url;
+                audioPlayer.play();
+            } else {
+                alert('Error: ' + result.error);
+            }
+        }
+    </script>
 </body>
 </html>
