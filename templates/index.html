@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text-to-Speech App</title>
+</head>
+<body>
+    <h1>Text-to-Speech (TTS) App</h1>
+    <textarea id="text-input" rows="5" cols="40" placeholder="Enter your text"></textarea><br>
+    <label for="speed-input">Speed: </label>
+    <input type="range" id="speed-input" min="0.5" max="1.5" value="1.0" step="0.1"><br><br>
+    <button onclick="convertText()">Convert to Speech</button>
+    <br><br>
+    <audio id="audio-player" controls></audio>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
