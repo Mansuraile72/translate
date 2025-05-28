@@ -13,22 +13,25 @@ def index():
 def tts():
     data = request.json
     text = data.get('text')
-    speed = float(data.get('speed', 1.0))
+    speed_mode = data.get('speed', 'normal')  # normal or slow
 
     if not text:
         return jsonify({'error': 'No text provided'})
 
-    # Generate unique filename
-    filename = f"audio_{uuid.uuid4().hex}.mp3"
-    filepath = os.path.join('static', filename)
+    try:
+        # Generate unique filename
+        filename = f"audio_{uuid.uuid4().hex}.mp3"
+        filepath = os.path.join('static', filename)
 
-    # Generate TTS audio (speed adjustment)
-    tts = gTTS(text=text, lang='en', slow=False)
-    tts.save(filepath)
+        # gTTS with slow mode
+        tts = gTTS(text=text, lang='en', slow=(speed_mode == 'slow'))
+        tts.save(filepath)
 
-    # Return full URL to the audio
-    full_url = request.host_url + 'static/' + filename
-    return jsonify({'audio_url': full_url})
+        # Full URL for audio
+        full_url = request.host_url + 'static/' + filename
+        return jsonify({'audio_url': full_url})
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
