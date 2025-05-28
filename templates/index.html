@@ -3,13 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>Text-to-Speech App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            text-align: center;
+            padding: 50px;
+        }
+        textarea {
+            width: 80%;
+            height: 100px;
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        input[type="range"] {
+            width: 200px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        audio {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Text-to-Speech (TTS) App</h1>
-    <textarea id="text-input" rows="5" cols="40" placeholder="Enter your text"></textarea><br>
-    <label for="speed-input">Speed: </label>
-    <input type="range" id="speed-input" min="0.5" max="1.5" value="1.0" step="0.1"><br><br>
-    <button onclick="convertText()">Convert to Speech</button>
+    <h1>🌟 Text-to-Speech App 🌟</h1>
+    <textarea id="text-input" placeholder="Enter your text here..."></textarea><br>
+    <label for="speed-input">Speed:</label>
+    <input type="range" id="speed-input" min="0.5" max="1.5" value="1.0" step="0.1"><br>
+    <button onclick="convertText()">🎤 Convert to Audio</button>
     <br><br>
     <audio id="audio-player" controls></audio>
 
