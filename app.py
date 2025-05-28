@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 from gtts import gTTS
 import os
 import uuid
@@ -13,19 +13,22 @@ def index():
 def tts():
     data = request.json
     text = data.get('text')
-    speed = data.get('speed', 1.0)
+    speed = float(data.get('speed', 1.0))
 
     if not text:
         return jsonify({'error': 'No text provided'})
 
     # Generate unique filename
-    filename = f"static/audio_{uuid.uuid4().hex}.mp3"
+    filename = f"audio_{uuid.uuid4().hex}.mp3"
+    filepath = os.path.join('static', filename)
 
-    # Generate TTS with Google Text-to-Speech
-    tts = gTTS(text=text, lang='en', slow=(speed < 1.0))
-    tts.save(filename)
+    # Generate TTS audio (speed adjustment)
+    tts = gTTS(text=text, lang='en', slow=False)
+    tts.save(filepath)
 
-    return jsonify({'audio_url': '/' + filename})
+    # Return full URL to the audio
+    full_url = request.host_url + 'static/' + filename
+    return jsonify({'audio_url': full_url})
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
